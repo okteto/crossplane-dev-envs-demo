@@ -1,0 +1,15 @@
+apiVersion: crossplanedemo.com/v1alpha1
+kind: SQLClaim
+metadata:
+  name: my-db
+spec:
+  id: my-db
+  compositionSelector:
+    matchLabels:
+      provider: aws
+      db: postgresql
+  parameters:
+    version: "13.4"
+    size: small
+  writeConnectionSecretToRef:
+    name: my-db

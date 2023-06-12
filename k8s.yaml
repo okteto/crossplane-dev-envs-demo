@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-app
+  template:
+    metadata:
+      labels:
+        app: postgres-app
+    spec:
+      containers:
+      - image: vfarcic/go-postgres-app:1.0.0
+        name: postgres-app
+        env:
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: my-db
+                key: username
+          - name: DB_PASS
+            valueFrom:
+              secretKeyRef:
+                name: my-db
+                key: password
+          - name: DB_ENDPOINT
+            valueFrom:
+              secretKeyRef:
+                name: my-db
+                key: endpoint
+          - name: DB_PORT
+            valueFrom:
+              secretKeyRef:
+                name: my-db
+                key: port
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-app
+spec:
+  type: ClusterIP
+  ports:
+  - name: "postgres-app"
+    port: 3000
+  selector:
+    app: postgres-app
