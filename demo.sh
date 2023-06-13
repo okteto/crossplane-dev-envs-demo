@@ -56,6 +56,8 @@ kubectl apply -f packages
 # CL: How do you bring up the Postgres database?
 # DD: I would use the AWS console to create a RDS instance. But that is complicated and I don't have AWS knowledge and don't want to depend on you each time. I would rather have a simple way to bring up the database.
 
+kubectl create namespace dev
+
 kubectl --namespace dev apply \
     --filename claim.yaml
 

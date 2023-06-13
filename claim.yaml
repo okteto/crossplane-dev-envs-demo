@@ -1,4 +1,12 @@
-apiVersion: crossplanedemo.com/v1alpha1
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-db-password
+data:
+  password: cG9zdGdyZXM=
+---
+apiVersion: devopstoolkitseries.com/v1alpha1
 kind: SQLClaim
 metadata:
   name: my-db
@@ -6,10 +14,8 @@ spec:
   id: my-db
   compositionSelector:
     matchLabels:
-      provider: aws
+      provider: aws-official
       db: postgresql
   parameters:
-    version: "13.4"
+    version: "14.7"
     size: small
-  writeConnectionSecretToRef:
-    name: my-db
