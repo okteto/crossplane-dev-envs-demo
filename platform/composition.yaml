@@ -1,0 +1,43 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: tacoshop-infrastructure
+spec:
+  compositeTypeRef:
+    apiVersion: demo.okteto.com/v1alpha1
+    kind: database
+  resources:
+    - name: s3Bucket
+      base:
+        apiVersion: s3.aws.upbound.io/v1beta1
+        kind: Bucket
+        metadata:
+          name: crossplane-bucket
+        spec:
+          forProvider:
+            region: "us-east-2"
+      patches:
+        - fromFieldPath: "region"
+          toFieldPath: "spec.forProvider.region"
+          transforms:
+            - type: map
+              map: 
+                EU: "eu-north-1"
+                US: "us-east-2"
+    - name: sqsQueue
+      base:
+        apiVersion: sqs.aws.upbound.io/v1beta1
+        kind: Queue
+        metadata:
+          name: crossplane-sqs
+        spec:
+          forProvider:
+            region: "us-east-2"
+      patches:
+        - fromFieldPath: "region"
+          toFieldPath: "spec.forProvider.region"
+          transforms:
+            - type: map
+              map: 
+                EU: "eu-north-1"
+                US: "us-east-2"
