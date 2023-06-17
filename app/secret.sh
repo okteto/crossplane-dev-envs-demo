@@ -1,1 +1,0 @@
-kubectl create secret generic aws-credentials --save-config --dry-run=client --from-literal=AWS_REGION=eu-north-1 --from-literal=AWS_DEFAULT_REGION=eu-north-1 --from-literal=AWS_SECRET_ACCESS_KEY=XMhUb+EM2aK+pjs6fZPntct7AnXY0fYVjjJCEjj3 --from-literal=AWS_ACCESS_KEY_ID=AKIAWID2N6LVGHTPQOYE -o yaml | kubectl apply -n dev -f -
