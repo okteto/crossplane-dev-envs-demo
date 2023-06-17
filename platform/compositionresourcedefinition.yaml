@@ -7,9 +7,6 @@ spec:
   names:
     kind: database
     plural: databases
-  connectionSecretKeys:
-    - queueUri
-    - bucketName
   versions:
   - name: v1alpha1
     served: true

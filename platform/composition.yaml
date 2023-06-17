@@ -30,9 +30,6 @@ spec:
         kind: Queue
         metadata:
           name: crossplane-sqs
-        spec:
-          forProvider:
-            region: "us-east-2"
       patches:
         - fromFieldPath: "region"
           toFieldPath: "spec.forProvider.region"

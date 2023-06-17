@@ -21,20 +21,20 @@ deploy:
   commands:
   - name: Deploy the Menu microservice
     command: |
-      helm upgrade --install menu menu/chart --set image=$OKTETO_BUILD_MENU_IMAGE --set queue=$SQS_QUEUE_URL --set author="${OKTETO_NAMESPACE}-${OKTETO_USERNAME}"
+      helm upgrade --install menu app/menu/chart --set image=$OKTETO_BUILD_MENU_IMAGE --set author="crossplane"
 
   - name: Deploy the Kitchen microservice
-    command: helm upgrade --install kitchen kitchen/chart --set image=$OKTETO_BUILD_KITCHEN_IMAGE --set queue=$SQS_QUEUE_NAME --set check=https://check-${OKTETO_NAMESPACE}.${OKTETO_DOMAIN}/checks
+    command: helm upgrade --install kitchen app/kitchen/chart --set image=$OKTETO_BUILD_KITCHEN_IMAGE --set check=http://check/checks
 
   - name: Deploy the Check microservice
     command: |
-     helm upgrade --install check check/chart --set image=${OKTETO_BUILD_CHECK_IMAGE} --set bucket="$S3_BUCKET_NAME"
+     helm upgrade --install check app/check/chart --set image=${OKTETO_BUILD_CHECK_IMAGE}
 
 dev:
   menu:
     command: bash
     sync:
-    - menu:/usr/src/app
+    - app/menu:/usr/src/app
     forward:
     - 9229:9229
 
@@ -42,13 +42,13 @@ dev:
     image: $OKTETO_BUILD_KITCHEN_DEV_IMAGE
     command: bash
     sync:
-    - kitchen:/usr/src/app
+    - app/kitchen:/usr/src/app
     environment:
      GIN_MODE: debug
 
   check:
     command: bash
     sync:
-    - check:/usr/src/app
+    - app/check:/usr/src/app
     environment:
      RELOAD: true

@@ -68,11 +68,11 @@ kubectl --namespace dev apply --filename claim.yaml
 kubectl --namespace dev get tacoshop-database
 
 # CL: What else do you need?
-# DD: I need to be able to access the services
-
-kubectl --namespace dev get secrets
+# DD: I need to be able to access the cloud services
+./create-app-secret.sh
 
 kubectl get queues.sqs.aws.upbound.io
+kubectl get buckets.s3.aws.upbound.io
 
 # Open AWS and show that the SQS queue was created as an example
 
