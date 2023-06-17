@@ -1,21 +1,22 @@
 icon: https://raw.githubusercontent.com/okteto/icons/main/oktaco.png
 
 build:
-  aws:
-    context: app/aws
-
   menu:
     context: app/menu
+    image: ramiro/crossplane-dev-env-demo-menu:latest
 
   kitchen:
     context: app/kitchen
+    image: ramiro/crossplane-dev-env-demo-kitchen:latest
 
   kitchen-dev:
     context: app/kitchen
     target: dev
+    image: ramiro/crossplane-dev-env-demo-kitchen-dev:latest
 
   check:
     context: app/check
+    image: ramiro/crossplane-dev-env-demo-check:latest
 
 deploy:
   commands:
