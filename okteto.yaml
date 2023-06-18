@@ -33,7 +33,7 @@ deploy:
 
   - name: Deploy the Check microservice
     command: |
-     helm upgrade --install check app/check/chart --set image=${OKTETO_BUILD_CHECK_IMAGE}
+     helm upgrade --install check app/check/chart --set image=$OKTETO_BUILD_CHECK_IMAGE
 
 dev:
   menu:
