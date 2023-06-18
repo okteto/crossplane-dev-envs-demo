@@ -20,6 +20,10 @@ build:
 
 deploy:
   commands:
+  - name: Create App Secret
+    command: |
+      sh create-app-secret.sh
+
   - name: Deploy the Menu microservice
     command: |
       helm upgrade --install menu app/menu/chart --set image=$OKTETO_BUILD_MENU_IMAGE --set author="crossplane"
