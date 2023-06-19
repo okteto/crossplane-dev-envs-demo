@@ -13,7 +13,7 @@ AWS_REGION=$(kubectl get queues.sqs.aws.upbound.io $queue -o=jsonpath='{.spec.fo
 S3_BUCKET_NAME=$(kubectl get buckets.s3.aws.upbound.io -o=jsonpath='{.items[0].metadata.annotations.crossplane\.io/external-name}')
 
 
-kubectl create secret generic my-db-secret \
+kubectl create secret generic aws-credentials \
 --save-config \
 --dry-run=client \
 --from-literal=QUEUE=$SQS_QUEUE_URL \
