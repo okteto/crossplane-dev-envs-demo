@@ -55,29 +55,58 @@ kubectl apply -f packages
 
 ## TALK
 
-# CL: What do you need to develop your application?
-# DD: I need to bring up all the services that my application depends on. That would be an S3 bucket, an SQS queue, a dynamo DB, a go server for batch processing, a fastAPI server, and a nodeJS frontend
-# CL: Whoa. That's a lot.  How do you bring up all those things?
-# DD: I would use the AWS console to create the S3 bucket, then there's an option somewhere there for SQS, and... I don't know :cry: Is complicated and I don't have AWS knowledge and don't want to depend on you each time. I would rather have a simple way to bring up the databases.
-# CL: Argh..that's too much work. No way that you can figure all that on your own. There's a better way
+# DD: I'm a developer at the world famous taco shop, and we recently migrated from a monolith to microservices. It used to be a monolith, and I knew now to bring every up, but it now that we are in Kubernetes, I'm confused. Can you help me?
+
+# CL: OMG. I guess.  What do you need to develop your application?
+
+# DD: I need to bring up all the cloud services that my application depends on. That would be an S3 bucket, an SQS queue. But I don't know how to get access to the AWS account. Do I just use my own? 
+
+# CL: No! You need to the use your team's account. And make sure that you create them with the right tags, the right version, and in the right region! 
+
+# DD: What? What is a region? Like the Tel Aviv AWS region? I have no idea what you're talking about. 
+
+# CL: If only, but no. Okey, this is a lot. And you need this every single time?
+
+# DD: Of course. How else do you want me to develop? I want to make sure that my code works!
+
+# CL: Ok. We need to automate this. I don't want you opening 300 JIRA tickets every day.
+
+# CL: You know what, I think crossplane is a the right tool for this!
+
+# CL: Let me start by creating an abstraction for all your AWS needs
+
+# CL: Shows compositions and composition definition
 
 kubectl create namespace dev
 
+# CL: Shows claim
+
+# DD: So I only have to apply that one file right? 
+
 kubectl --namespace dev apply --filename claim.yaml
+
+# CL: Yes, and this will automatically create the infra for you, with all the necessary configurations, and following all our internal rules. That way no one gets in trouble.
 
 kubectl --namespace dev get tacoshop-database
 
-# CL: What else do you need?
-# DD: I need to be able to access the cloud services
-./create-app-secret.sh
-
-kubectl get queues.sqs.aws.upbound.io
+kubectl get queues.sqs.aws.upbound.io 
 kubectl get buckets.s3.aws.upbound.io
 
-# Open AWS and show that the SQS queue was created as an example
+# CL: Why are you still here? Do you need even more things?
 
-# CL: What else do you need?
-# DD: I need all those services I told you about up and running
+# DD: Of course. I have the cloud resources but what about the three...million microservices that we use? I want to see my application up and running. And who do I get the services to talk to the cloud resources?
 
-okteto context use
+# CL: Wow, you really just want to focus on code right? I'm guessing you don't even know how to pronounce Kubernetes.
+
+# DD: Do you mean Koober-nets?
+
+# CL: Argh...never mind. Let's automate ourselves away from this problem once and for all. 
+
+# CL: Take a look at this beautiful yaml file. It describes your entire development environment, from building the latest images, to deploying your microservices in Kubernetes, and finally, to developing directly in Kubernetes. This way, you don't need to run anything manually, and you don't need to be an expert on every single project in the CNCF landscape.
+
+# DD: Landscape? Can I go there?
+
+# CL: Stares... no. 
+
 okteto up --namespace dev
+

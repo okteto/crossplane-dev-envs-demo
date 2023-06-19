@@ -22,7 +22,7 @@ deploy:
   commands:
   - name: Create App Secret
     command: |
-      sh create-app-secret.sh
+      sh create-app-secret.sh $OKTETO_NAMESPACE
 
   - name: Deploy the Menu microservice
     command: |
@@ -37,10 +37,11 @@ deploy:
 
 dev:
   menu:
-    command: bash
+    command: yarn start
     sync:
     - app/menu:/usr/src/app
     forward:
+    - 3000:3000
     - 9229:9229
 
   kitchen:
@@ -48,6 +49,8 @@ dev:
     command: bash
     sync:
     - app/kitchen:/usr/src/app
+    forward:
+    - 8000:8000
     environment:
      GIN_MODE: debug
 
@@ -55,5 +58,7 @@ dev:
     command: bash
     sync:
     - app/check:/usr/src/app
+    forward:
+    - 3000:3000
     environment:
      RELOAD: true
