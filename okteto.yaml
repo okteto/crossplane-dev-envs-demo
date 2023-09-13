@@ -1,24 +1,64 @@
+icon: https://raw.githubusercontent.com/okteto/icons/main/oktaco.png
+
 build:
-  postgres-app:
-    image: vfarcic/go-postgres-app:1.0.0
-    context: .
+  menu:
+    context: app/menu
+    image: ramiro/crossplane-dev-env-demo-menu:latest
+
+  kitchen:
+    context: app/kitchen
+    image: ramiro/crossplane-dev-env-demo-kitchen:latest
+
+  kitchen-dev:
+    context: app/kitchen
+    target: dev
+    image: ramiro/crossplane-dev-env-demo-kitchen-dev:latest
+
+  check:
+    context: app/check
+    image: ramiro/crossplane-dev-env-demo-check:latest
 
 deploy:
-  - kubectl apply --filename schemahero.yaml
-  - kubectl apply --filename k8s.yaml
+  commands:
+  - name: Create App Secret
+    command: |
+      sh create-app-secret.sh $OKTETO_NAMESPACE
+
+  - name: Deploy the Menu microservice
+    command: |
+      helm upgrade --install menu app/menu/chart --set image=$OKTETO_BUILD_MENU_IMAGE --set author="crossplane"
+
+  - name: Deploy the Kitchen microservice
+    command: helm upgrade --install kitchen app/kitchen/chart --set image=$OKTETO_BUILD_KITCHEN_IMAGE --set check=http://check/checks
+
+  - name: Deploy the Check microservice
+    command: |
+     helm upgrade --install check app/check/chart --set image=$OKTETO_BUILD_CHECK_IMAGE
 
 dev:
-  postgres-app:
-    image: okteto/golang:1
+  menu:
+    command: yarn start
+    sync:
+    - app/menu:/usr/src/app
+    forward:
+    - 3000:3000
+    - 9229:9229
+
+  kitchen:
+    image: $OKTETO_BUILD_KITCHEN_DEV_IMAGE
     command: bash
     sync:
-      - .:/app
-    volumes:
-      - /go
-      - /root/.cache
-    securityContext:
-      capabilities:
-        add:
-          - SYS_PTRACE
+    - app/kitchen:/usr/src/app
     forward:
-      - 3000:3000
+    - 8000:8000
+    environment:
+     GIN_MODE: debug
+
+  check:
+    command: bash
+    sync:
+    - app/check:/usr/src/app
+    forward:
+    - 3000:3000
+    environment:
+     RELOAD: true
